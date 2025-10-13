@@ -5,10 +5,8 @@ from enums.tipodispositivo import TipoDispositivo
 
 
 class TestSensorMovimiento:
-    """Tests para la clase SensorMovimiento"""
 
     def test_sensor_movimiento_creacion_basica(self):
-        """Test de creación básica de sensor de movimiento"""
         sensor = SensorMovimiento()
         assert sensor.get_nombre() is None
         assert sensor.get_marca() is None
@@ -21,7 +19,6 @@ class TestSensorMovimiento:
         assert isinstance(sensor.get_fecha_creacion(), datetime)
 
     def test_sensor_movimiento_crear_dispositivo_exitoso(self):
-        """Test de creación de dispositivo exitosa"""
         sensor = SensorMovimiento()
         resultado = sensor.crear_dispositivo(
             nombre="Sensor Pasillo",
@@ -39,20 +36,16 @@ class TestSensorMovimiento:
         assert sensor.get_id_usuario() == 1
 
     def test_sensor_movimiento_setters_y_getters(self):
-        """Test de setters y getters específicos de sensor de movimiento"""
         sensor = SensorMovimiento()
         
-        # Test setters
         sensor.set_estado_activo(True)
         fecha_deteccion = datetime.now()
         sensor.set_ultima_deteccion(fecha_deteccion)
         
-        # Test getters
         assert sensor.get_estado_activo() is True
         assert sensor.get_ultima_deteccion() == fecha_deteccion
 
     def test_sensor_movimiento_encender_exitoso(self):
-        """Test de encendido exitoso"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         assert sensor.get_activado() is False
@@ -65,7 +58,6 @@ class TestSensorMovimiento:
         assert sensor.get_estado_activo() is True
 
     def test_sensor_movimiento_encender_ya_encendido(self):
-        """Test de encendido cuando ya está encendido"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor.encender()
@@ -75,7 +67,6 @@ class TestSensorMovimiento:
             sensor.encender()
 
     def test_sensor_movimiento_apagar_exitoso(self):
-        """Test de apagado exitoso"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor.encender()
@@ -89,7 +80,6 @@ class TestSensorMovimiento:
         assert sensor.get_estado_activo() is False
 
     def test_sensor_movimiento_apagar_ya_apagado(self):
-        """Test de apagado cuando ya está apagado"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         assert sensor.get_activado() is False
@@ -98,7 +88,6 @@ class TestSensorMovimiento:
             sensor.apagar()
 
     def test_sensor_movimiento_encender_eliminado(self):
-        """Test de encendido cuando está eliminado"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor._eliminado = True
@@ -107,7 +96,6 @@ class TestSensorMovimiento:
             sensor.encender()
 
     def test_sensor_movimiento_apagar_eliminado(self):
-        """Test de apagado cuando está eliminado"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor._eliminado = True
@@ -116,7 +104,6 @@ class TestSensorMovimiento:
             sensor.apagar()
 
     def test_sensor_movimiento_detectar_movimiento_exitoso(self):
-        """Test de detección de movimiento exitosa"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor.encender()
@@ -135,7 +122,6 @@ class TestSensorMovimiento:
         assert sensor.get_ultima_deteccion() is not None
 
     def test_sensor_movimiento_detectar_movimiento_apagado(self):
-        """Test de detección de movimiento cuando está apagado"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         assert sensor.get_activado() is False
@@ -144,7 +130,6 @@ class TestSensorMovimiento:
             sensor.detectar_movimiento()
 
     def test_sensor_movimiento_detectar_movimiento_eliminado(self):
-        """Test de detección de movimiento cuando está eliminado"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor._eliminado = True
@@ -153,7 +138,6 @@ class TestSensorMovimiento:
             sensor.detectar_movimiento()
 
     def test_sensor_movimiento_detectar_movimiento_no_activo(self):
-        """Test de detección de movimiento cuando no está activo"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor.encender()
@@ -163,18 +147,15 @@ class TestSensorMovimiento:
             sensor.detectar_movimiento()
 
     def test_sensor_movimiento_detectar_movimiento_multiple(self):
-        """Test de múltiples detecciones de movimiento"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor.encender()
         
-        # Primera detección
         resultado1 = sensor.detectar_movimiento()
         primera_fecha = resultado1['fecha_deteccion']
         
-        # Segunda detección (después de un pequeño delay)
         import time
-        time.sleep(0.01)  # Pequeño delay para asegurar fechas diferentes
+        time.sleep(0.01)
         resultado2 = sensor.detectar_movimiento()
         segunda_fecha = resultado2['fecha_deteccion']
         
@@ -182,7 +163,6 @@ class TestSensorMovimiento:
         assert sensor.get_ultima_deteccion() == segunda_fecha
 
     def test_sensor_movimiento_buscar_por_nombre_exitoso(self):
-        """Test de búsqueda por nombre exitosa"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Pasillo", "Xiaomi", "Motion Sensor", 2.0, 1)
         
@@ -191,7 +171,6 @@ class TestSensorMovimiento:
         assert resultado == "Sensor Pasillo"
 
     def test_sensor_movimiento_buscar_por_nombre_vacio(self):
-        """Test de búsqueda con nombre vacío"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Pasillo", "Xiaomi", "Motion Sensor", 2.0, 1)
         
@@ -199,7 +178,6 @@ class TestSensorMovimiento:
             sensor.buscar_por_nombre("")
 
     def test_sensor_movimiento_eliminar_por_nombre_exitoso(self):
-        """Test de eliminación por nombre exitosa"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Pasillo", "Xiaomi", "Motion Sensor", 2.0, 1)
         
@@ -209,7 +187,6 @@ class TestSensorMovimiento:
         assert sensor._eliminado is True
 
     def test_sensor_movimiento_eliminar_por_nombre_vacio(self):
-        """Test de eliminación con nombre vacío"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Pasillo", "Xiaomi", "Motion Sensor", 2.0, 1)
         
@@ -217,7 +194,6 @@ class TestSensorMovimiento:
             sensor.eliminar_por_nombre("")
 
     def test_sensor_movimiento_str_representacion(self):
-        """Test de representación string"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Pasillo", "Xiaomi", "Motion Sensor", 2.0, 1)
         
@@ -233,7 +209,6 @@ class TestSensorMovimiento:
         assert "usuario_id=1" in resultado
 
     def test_sensor_movimiento_str_representacion_encendido(self):
-        """Test de representación string cuando está encendido"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Pasillo", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor.encender()
@@ -244,7 +219,6 @@ class TestSensorMovimiento:
         assert "Activo" in resultado
 
     def test_sensor_movimiento_str_representacion_con_deteccion(self):
-        """Test de representación string con detección previa"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Pasillo", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor.encender()
@@ -256,7 +230,6 @@ class TestSensorMovimiento:
         assert "Ninguna" not in resultado
 
     def test_sensor_movimiento_fixture(self, sensor_movimiento_test):
-        """Test usando fixture de sensor de movimiento"""
         assert sensor_movimiento_test.get_nombre() == "Sensor Pasillo"
         assert sensor_movimiento_test.get_marca() == "Xiaomi"
         assert sensor_movimiento_test.get_modelo() == "Motion Sensor"
@@ -265,31 +238,25 @@ class TestSensorMovimiento:
         assert sensor_movimiento_test.get_id_dispositivo() == 4
 
     def test_sensor_movimiento_estado_activo_independiente(self):
-        """Test que el estado activo es independiente del estado encendido/apagado"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         
-        # Inicialmente ambos están en False
         assert sensor.get_activado() is False
         assert sensor.get_estado_activo() is False
         
-        # Al encender, ambos se activan
         sensor.encender()
         assert sensor.get_activado() is True
         assert sensor.get_estado_activo() is True
         
-        # Se puede cambiar el estado activo independientemente
         sensor.set_estado_activo(False)
         assert sensor.get_activado() is True
         assert sensor.get_estado_activo() is False
         
-        # Al apagar, ambos se desactivan
         sensor.apagar()
         assert sensor.get_activado() is False
         assert sensor.get_estado_activo() is False
 
     def test_sensor_movimiento_deteccion_actualiza_fecha(self):
-        """Test que la detección actualiza correctamente la fecha"""
         sensor = SensorMovimiento()
         sensor.crear_dispositivo("Sensor Test", "Xiaomi", "Motion Sensor", 2.0, 1)
         sensor.encender()
