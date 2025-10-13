@@ -31,4 +31,7 @@ Lo que incluye el proyecto:
 
 **Grupo:** ISPC-JUNTOS-2025
 
+## ACLARACION
+- ** Debido a que el proyecto utiliza un "encriptador de contraseñas" dentro de las consultas dml el primer usuario que se inserta es el usuario admin con la contraseña encriptada, ('Juan', 'Pérez', 'juanperez@gmail.com', '+-=@$x@bsx¿', 'administrador', 'Av. General paz', 742), la contraseña  sin escriptar es "123aixabsx4" y es la que se deberia utilizar para junto con el email "juanperez@gmail.com" para loguearse sin problemas y acceder al menu del administrador
+
 
