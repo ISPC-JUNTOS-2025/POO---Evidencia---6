@@ -1,0 +1,12 @@
+# Directorios de Python creados automáticamente
+__pycache__/ 
+
+# Archivos de Python creados automáticamente
+*.py[cod]
+*$py.class
+
+# Archivos de caché
+.cache
+
+# Archivos de configuración
+config.ini
