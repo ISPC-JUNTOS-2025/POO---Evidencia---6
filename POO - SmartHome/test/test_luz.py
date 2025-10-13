@@ -5,10 +5,8 @@ from enums.tipodispositivo import TipoDispositivo
 
 
 class TestLuz:
-    """Tests para la clase Luz"""
 
     def test_luz_creacion_basica(self):
-        """Test de creación básica de luz"""
         luz = Luz()
         assert luz.get_nombre() is None
         assert luz.get_marca() is None
@@ -21,7 +19,6 @@ class TestLuz:
         assert isinstance(luz.get_fecha_creacion(), datetime)
 
     def test_luz_crear_dispositivo_exitoso(self):
-        """Test de creación de dispositivo exitosa"""
         luz = Luz()
         resultado = luz.crear_dispositivo(
             nombre="Luz Sala",
