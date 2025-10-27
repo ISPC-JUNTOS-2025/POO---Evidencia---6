@@ -4,4 +4,4 @@ class TipoDispositivo(Enum):
     LUZ = "Luz"
     ELECTRODOMESTICO = "Electrodomestico"
     SENSOR = "Sensor"
-    DISPOSITIVO_DE_GRABACION = "Dispositivo De Grabacion"
+    DISPOSITIVO_DE_GRABACION = "Grabacion"

@@ -15,7 +15,6 @@ class DispositivoDAO(IDispositivoDAO):
             try:
                 cursor = conn.cursor()
                 
-                # Verificar si ya existe un dispositivo con el mismo nombre para el usuario
                 query_verificar = """
                     SELECT id_dispositivo FROM dispositivos 
                     WHERE nombre = %s AND id_usuario = %s
