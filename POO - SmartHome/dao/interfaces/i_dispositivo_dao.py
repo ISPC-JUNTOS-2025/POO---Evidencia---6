@@ -22,3 +22,7 @@ class IDispositivoDAO(ABC):
     @abstractmethod
     def eliminar(self, id_dispositivo: int):
         pass
+    
+    @abstractmethod
+    def buscar_por_nombre_global(self, nombre: str):
+        pass

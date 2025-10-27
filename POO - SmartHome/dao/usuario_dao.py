@@ -50,8 +50,7 @@ class UsuarioDao(IUsuarioDAO):
                     usuario.set_email(result[3])
                     usuario.set_contraseña(result[4])
                     
-                    # Convertir string del rol al enum Rol
-                    rol_str = result[5].lower()  # "administrador", "usuario", "invitado"
+                    rol_str = result[5].lower()
                     if rol_str == "administrador":
                         usuario.set_rol(Rol.ADMINISTRADOR)
                     elif rol_str == "usuario":
@@ -59,7 +58,7 @@ class UsuarioDao(IUsuarioDAO):
                     elif rol_str == "invitado":
                         usuario.set_rol(Rol.INVITADO)
                     else:
-                        usuario.set_rol(Rol.USUARIO)  # valor por defecto
+                        usuario.set_rol(Rol.USUARIO)
                     
                     usuario.set_calle(result[6])
                     usuario.set_numero(result[7])
@@ -82,3 +81,41 @@ class UsuarioDao(IUsuarioDAO):
                 return cursor.rowcount > 0
             except mysql.connector.Error as error:
                 raise Exception(f"Error al actualizar rol usuario: {error}")
+    
+    def buscar_usuario_por_nombre(self, nombre: str, apellido: str):
+        with DBConn() as conn:
+            try:
+                cursor = conn.cursor()
+                query = """
+                SELECT id_usuario, nombre, apellido, email, contraseña, rol, calle, numero
+                FROM usuarios
+                WHERE nombre = %s AND apellido = %s
+                """
+                cursor.execute(query, (nombre, apellido))
+                result = cursor.fetchone()
+                
+                if result:
+                    usuario = Usuario()
+                    usuario.set_id_usuario(result[0])
+                    usuario.set_nombre(result[1])
+                    usuario.set_apellido(result[2])
+                    usuario.set_email(result[3])
+                    usuario.set_contraseña(result[4])
+                    
+                    rol_str = result[5].lower()
+                    if rol_str == "administrador":
+                        usuario.set_rol(Rol.ADMINISTRADOR)
+                    elif rol_str == "usuario":
+                        usuario.set_rol(Rol.USUARIO)
+                    elif rol_str == "invitado":
+                        usuario.set_rol(Rol.INVITADO)
+                    else:
+                        usuario.set_rol(Rol.USUARIO)
+                    
+                    usuario.set_calle(result[6])
+                    usuario.set_numero(result[7])
+                    return usuario
+                
+                return None
+            except mysql.connector.Error as error:
+                raise Exception(f"Error al buscar usuario por nombre: {error}")

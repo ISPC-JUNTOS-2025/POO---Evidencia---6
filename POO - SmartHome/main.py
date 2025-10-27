@@ -6,6 +6,7 @@ from dominio.luz import Luz
 from dominio.aire_acondicionado import AireAcondicionado
 from dominio.camara import Camara
 from dominio.sensor_movimiento import SensorMovimiento
+from enums.tipodispositivo import TipoDispositivo
 import sys
 
 usuario_dao = UsuarioDao()
@@ -83,7 +84,7 @@ def menu_usuario(usuario: Usuario):
                             print(f"• {d['nombre']} ({d['tipo_dispositivo']}) - {estado}")
                             print(f"  Marca: {d['marca']} | Modelo: {d['modelo']}")
                             print(f"  Consumo: {d['consumo_energetico']} W")
-                            print(f"  Usuario ID: {d['id_usuario']}\n")
+                            print(f"  Propietario: {d.get('nombre_usuario', 'N/A')}\n")
                     else:
                         print("\n✗ No hay dispositivos registrados en el sistema.")
                 except Exception as e:
@@ -117,13 +118,13 @@ def menu_admin(usuario: Usuario):
                         print("\n--- Lista de dispositivos ---")
                         for d in dispositivos:
                             estado = "Encendido" if d.get("activado") else "Apagado"
-                            print(f"ID: {d['id_dispositivo']} - {d['nombre']} ({d['tipo_dispositivo']}) - {estado}")
-                            print(f"  Usuario ID: {d['id_usuario']} | Marca: {d['marca']} | Modelo: {d['modelo']}")
+                            print(f"• {d['nombre']} ({d['tipo_dispositivo']}) - {estado}")
+                            print(f"  Propietario: {d.get('nombre_usuario', 'N/A')} | Marca: {d['marca']} | Modelo: {d['modelo']}")
                             print(f"  Consumo: {d['consumo_energetico']} W\n")
                     else:
-                        print("\n✗ No hay dispositivos registrados.")
+                        print("\nNo hay dispositivos registrados.")
                 except Exception as e:
-                    print(f"✗ Error: {e}")
+                    print(f"Error: {e}")
 
             case "2":
                 try:
@@ -132,17 +133,16 @@ def menu_admin(usuario: Usuario):
                     marca = input("Marca: ").strip()
                     modelo = input("Modelo: ").strip()
                     consumo = float(input("Consumo energético (W): "))
-                    id_usuario = usuario.get_id_usuario()  # Usar el ID del administrador logueado
+                    id_usuario = usuario.get_id_usuario()
 
                     print("\nTipos de dispositivo:")
-                    print("1. Luz")
-                    print("2. Aire Acondicionado")
-                    print("3. Cámara")
-                    print("4. Sensor de Movimiento")
+                    tipos = list(TipoDispositivo)
+                    for i, tipo in enumerate(tipos, 1):
+                        print(f"{i}. {tipo.value}")
                     
-                    tipo = input("Seleccione tipo: ").strip()
+                    opcion_tipo = input("Seleccione tipo: ").strip()
 
-                    match tipo:
+                    match opcion_tipo:
                         case "1":
                             intensidad = int(input("Intensidad (0-100): "))
                             regulable = input("¿Es regulable? (s/n): ").lower() == "s"
@@ -151,35 +151,37 @@ def menu_admin(usuario: Usuario):
                             nuevo.crear_dispositivo(nombre, marca, modelo, consumo, id_usuario, intensidad, regulable)
 
                         case "2":
-                            temperatura = int(input("Temperatura objetivo: "))
                             modo_eco = input("¿Modo eco? (s/n): ").lower() == "s"
                             
                             nuevo = AireAcondicionado()
-                            nuevo.crear_dispositivo(nombre, marca, modelo, consumo, id_usuario, temperatura, modo_eco)
+                            nuevo.crear_dispositivo(nombre, marca, modelo, consumo, id_usuario, 0, modo_eco)
 
                         case "3":
+                            sensibilidad = int(input("Sensibilidad (0-100): "))
+                            rango = float(input("Rango de detección (metros): "))
+                            
+                            nuevo = SensorMovimiento()
+                            nuevo.crear_dispositivo(nombre, marca, modelo, consumo, id_usuario, sensibilidad, rango)
+
+                        case "4":
                             print("Resoluciones: 720p, 1080p, 2K, 4K")
                             resolucion = input("Resolución: ").strip()
                             vision_nocturna = input("¿Visión nocturna? (s/n): ").lower() == "s"
                             
                             nuevo = Camara()
                             nuevo.crear_dispositivo(nombre, marca, modelo, consumo, id_usuario, resolucion, vision_nocturna, True)
-
-                        case "4":
-                            nuevo = SensorMovimiento()
-                            nuevo.crear_dispositivo(nombre, marca, modelo, consumo, id_usuario)
                             
                         case _:
                             print("✗ Tipo de dispositivo inválido.")
                             continue
 
                     dispositivo_dao.crear(nuevo)
-                    print("✓ Dispositivo creado con éxito.")
+                    print("Dispositivo creado con éxito.")
                     
                 except ValueError as e:
-                    print(f"✗ Error en los datos ingresados: {e}")
+                    print(f"Error en los datos ingresados: {e}")
                 except Exception as e:
-                    print(f"✗ Error: {e}")
+                    print(f"Error: {e}")
 
             case "3":
                 try:
@@ -187,47 +189,48 @@ def menu_admin(usuario: Usuario):
                     if dispositivos:
                         print("\n--- Dispositivos disponibles ---")
                         for d in dispositivos:
-                            print(f"ID: {d['id_dispositivo']} - {d['nombre']} ({d['tipo_dispositivo']})")
+                            print(f"• {d['nombre']} ({d['tipo_dispositivo']}) - Propietario: {d.get('nombre_usuario', 'N/A')}")
                     
-                    id_dispositivo = int(input("\nID del dispositivo a actualizar: "))
+                    nombre_dispositivo = input("\nNombre del dispositivo a actualizar: ").strip()
+                    dispositivo_actual = next((d for d in dispositivos if d['nombre'] == nombre_dispositivo), None)
+                    
+                    if not dispositivo_actual:
+                        print("Dispositivo no encontrado.")
+                        continue
+                    
                     nombre = input("Nuevo nombre: ").strip()
                     marca = input("Nueva marca: ").strip()
                     modelo = input("Nuevo modelo: ").strip()
                     consumo = float(input("Nuevo consumo energético (W): "))
                     
-                    dispositivo_actual = next((d for d in dispositivos if d['id_dispositivo'] == id_dispositivo), None)
+                    tipo = dispositivo_actual['tipo_dispositivo']
                     
-                    if dispositivo_actual:
-                        tipo = dispositivo_actual['tipo_dispositivo']
-                        
-                        match tipo:
-                            case "Luz":
-                                d = Luz()
-                                d.crear_dispositivo(nombre, marca, modelo, consumo, dispositivo_actual['id_usuario'], 100, False)
-                            case "Aire Acondicionado":
-                                d = AireAcondicionado()
-                                d.crear_dispositivo(nombre, marca, modelo, consumo, dispositivo_actual['id_usuario'], 24, False)
-                            case "Camara":
-                                d = Camara()
-                                d.crear_dispositivo(nombre, marca, modelo, consumo, dispositivo_actual['id_usuario'], "1080p", True, True)
-                            case "Sensor de Movimiento":
-                                d = SensorMovimiento()
-                                d.crear_dispositivo(nombre, marca, modelo, consumo, dispositivo_actual['id_usuario'])
-                            case _:
-                                print("✗ Tipo de dispositivo no reconocido.")
-                                continue
-                        
-                        d._id_dispositivo = id_dispositivo
-                        
-                        dispositivo_dao.actualizar(d)
-                        print("✓ Dispositivo actualizado.")
-                    else:
-                        print("✗ Dispositivo no encontrado.")
+                    match tipo:
+                        case "Luz":
+                            d = Luz()
+                            d.crear_dispositivo(nombre, marca, modelo, consumo, dispositivo_actual['id_usuario'], 100, False)
+                        case "Electrodomestico":
+                            d = AireAcondicionado()
+                            d.crear_dispositivo(nombre, marca, modelo, consumo, dispositivo_actual['id_usuario'], 0, False)
+                        case "Dispositivo De Grabacion":
+                            d = Camara()
+                            d.crear_dispositivo(nombre, marca, modelo, consumo, dispositivo_actual['id_usuario'], "1080p", True, True)
+                        case "Sensor":
+                            d = SensorMovimiento()
+                            d.crear_dispositivo(nombre, marca, modelo, consumo, dispositivo_actual['id_usuario'], 50, 5.0)
+                        case _:
+                            print("Tipo de dispositivo no reconocido.")
+                            continue
+                    
+                    d._id_dispositivo = dispositivo_actual['id_dispositivo']
+                    
+                    dispositivo_dao.actualizar(d)
+                    print("Dispositivo actualizado.")
                         
                 except ValueError as e:
-                    print(f"✗ Error en los datos: {e}")
+                    print(f"Error en los datos: {e}")
                 except Exception as e:
-                    print(f"✗ Error: {e}")
+                    print(f"Error: {e}")
 
             case "4":
                 try:
@@ -235,32 +238,45 @@ def menu_admin(usuario: Usuario):
                     if dispositivos:
                         print("\n--- Dispositivos disponibles ---")
                         for d in dispositivos:
-                            print(f"ID: {d['id_dispositivo']} - {d['nombre']} ({d['tipo_dispositivo']})")
+                            print(f"• {d['nombre']} ({d['tipo_dispositivo']}) - Propietario: {d.get('nombre_usuario', 'N/A')}")
                     
-                    id_dispositivo = int(input("\nID del dispositivo a eliminar: "))
-                    confirmacion = input(f"¿Está seguro de eliminar el dispositivo {id_dispositivo}? (s/n): ").lower()
+                    nombre_dispositivo = input("\nNombre del dispositivo a eliminar: ").strip()
+                    dispositivo_actual = next((d for d in dispositivos if d['nombre'] == nombre_dispositivo), None)
+                    
+                    if not dispositivo_actual:
+                        print("Dispositivo no encontrado.")
+                        continue
+                    
+                    confirmacion = input(f"¿Está seguro de eliminar el dispositivo '{nombre_dispositivo}'? (s/n): ").lower()
                     
                     if confirmacion == 's':
-                        if dispositivo_dao.eliminar(id_dispositivo):
-                            print("✓ Dispositivo eliminado.")
+                        if dispositivo_dao.eliminar(dispositivo_actual['id_dispositivo']):
+                            print("Dispositivo eliminado.")
                         else:
-                            print("✗ No se encontró el dispositivo.")
+                            print("No se encontró el dispositivo.")
                     else:
-                        print("✗ Operación cancelada.")
+                        print("Operación cancelada.")
                         
                 except ValueError as e:
-                    print(f"✗ Error: {e}")
+                    print(f"Error: {e}")
                 except Exception as e:
-                    print(f"✗ Error: {e}")
+                    print(f"Error: {e}")
 
             case "5":
                 try:
                     usuarios = usuario_dao.buscar_usuarios()
                     print("\n--- Usuarios ---")
                     for u in usuarios:
-                        print(f"ID: {u.get_id_usuario()} - {u.get_nombre()} {u.get_apellido()} ({u.get_rol().value})")
+                        print(f"• {u.get_nombre()} {u.get_apellido()} ({u.get_rol().value}) - {u.get_email()}")
 
-                    id_u = int(input("\nIngrese ID de usuario a cambiar rol: "))
+                    nombre_u = input("\nNombre del usuario a cambiar rol: ").strip()
+                    apellido_u = input("Apellido del usuario: ").strip()
+                    
+                    usuario_obj = usuario_dao.buscar_usuario_por_nombre(nombre_u, apellido_u)
+                    
+                    if not usuario_obj:
+                        print("Usuario no encontrado.")
+                        continue
                     
                     print("\nRoles disponibles:")
                     print("1. administrador")
@@ -277,28 +293,24 @@ def menu_admin(usuario: Usuario):
                         case "3":
                             nuevo_rol = Rol.INVITADO
                         case _:
-                            print("✗ Opción de rol inválida.")
+                            print("Opción de rol inválida.")
                             continue
                     
-                    usuario_obj = next((x for x in usuarios if x.get_id_usuario() == id_u), None)
-                    if usuario_obj:
-                        usuario_obj.set_rol(nuevo_rol)
-                        usuario_dao.actualizar_rol_usuario(usuario_obj)
-                        print(f"✓ Rol actualizado correctamente a '{nuevo_rol.value}'.")
-                    else:
-                        print("✗ Usuario no encontrado.")
+                    usuario_obj.set_rol(nuevo_rol)
+                    usuario_dao.actualizar_rol_usuario(usuario_obj)
+                    print(f"Rol actualizado correctamente a '{nuevo_rol.value}'.")
                         
                 except ValueError as e:
-                    print(f"✗ Error: {e}")
+                    print(f"Error: {e}")
                 except Exception as e:
-                    print(f"✗ Error: {e}")
+                    print(f"Error: {e}")
 
             case "6":
-                print("✓ Cerrando sesión...")
+                print("Cerrando sesión...")
                 break
                 
             case _:
-                print("✗ Opción inválida.")
+                print("Opción inválida.")
 
 
 def main():
@@ -324,11 +336,11 @@ def main():
                             menu_usuario(usuario)
                             
             case "3":
-                print("✓ Saliendo del sistema...")
+                print("Saliendo del sistema...")
                 sys.exit()
                 
             case _:
-                print("✗ Opción inválida.")
+                print("Opción inválida.")
 
 
 if __name__ == "__main__":

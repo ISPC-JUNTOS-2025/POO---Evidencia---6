@@ -12,6 +12,8 @@ class SensorMovimiento(Dispositivo):
         self._fecha_creacion = datetime.now()
         self.__estado_activo = False
         self.__ultima_deteccion = None
+        self.__sensibilidad = 50
+        self.__rango = 5.0
 
     def get_estado_activo(self) -> bool:
         return self.__estado_activo
@@ -24,6 +26,22 @@ class SensorMovimiento(Dispositivo):
 
     def set_ultima_deteccion(self, valor: datetime):
         self.__ultima_deteccion = valor
+    
+    def get_sensibilidad(self) -> int:
+        return self.__sensibilidad
+    
+    def set_sensibilidad(self, valor: int):
+        if not 0 <= valor <= 100:
+            raise ValueError("La sensibilidad debe estar entre 0 y 100.")
+        self.__sensibilidad = valor
+    
+    def get_rango(self) -> float:
+        return self.__rango
+    
+    def set_rango(self, valor: float):
+        if valor <= 0:
+            raise ValueError("El rango debe ser mayor que cero.")
+        self.__rango = valor
 
     def encender(self):
         if self._eliminado:
@@ -46,7 +64,8 @@ class SensorMovimiento(Dispositivo):
         return f"Sensor '{self.get_nombre()}' desactivado correctamente."
 
     def crear_dispositivo(self, nombre: str, marca: str, modelo: str,
-                          consumo_energetico: float, id_usuario: int = None):
+                          consumo_energetico: float, id_usuario: int = None,
+                          sensibilidad: int = 50, rango: float = 5.0):
 
         if not nombre or not nombre.strip():
             raise ValueError("El nombre del dispositivo no puede estar vacío.")
@@ -60,6 +79,8 @@ class SensorMovimiento(Dispositivo):
         self.set_modelo(modelo.strip())
         self.set_consumo_energetico(consumo_energetico)
         self.set_id_usuario(id_usuario)
+        self.set_sensibilidad(sensibilidad)
+        self.set_rango(rango)
 
         return self
 

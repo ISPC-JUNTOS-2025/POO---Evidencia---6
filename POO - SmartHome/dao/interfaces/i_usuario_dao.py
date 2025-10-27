@@ -14,3 +14,7 @@ class IUsuarioDAO(ABC):
     @abstractmethod
     def actualizar_rol_usuario(usuario: Usuario):
         pass
+    
+    @abstractmethod
+    def buscar_usuario_por_nombre(nombre: str, apellido: str):
+        pass

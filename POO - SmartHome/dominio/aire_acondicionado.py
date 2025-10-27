@@ -24,6 +24,12 @@ class AireAcondicionado(Dispositivo):
 
     def set_modo_eco(self, valor: bool):
         self.__modo_eco = valor
+    
+    def get_temperatura_actual(self) -> int:
+        return self.__temperatura_objetivo
+    
+    def get_modo(self) -> bool:
+        return self.__modo_eco
 
 
     def encender(self):
@@ -46,7 +52,7 @@ class AireAcondicionado(Dispositivo):
 
     def crear_dispositivo(self, nombre: str, marca: str, modelo: str,
                           consumo_energetico: float, id_usuario: int = None,
-                          temperatura_objetivo: int = 24, modo_eco: bool = False):
+                          temperatura_objetivo: int = 0, modo_eco: bool = False):
 
         if not nombre or not nombre.strip():
             raise ValueError("El nombre del dispositivo no puede estar vacío.")
@@ -54,8 +60,6 @@ class AireAcondicionado(Dispositivo):
             raise ValueError("El consumo energético debe ser mayor que cero.")
         if not marca or not modelo:
             raise ValueError("La marca y el modelo son obligatorios.")
-        if not 16 <= temperatura_objetivo <= 30:
-            raise ValueError("La temperatura objetivo debe estar entre 16°C y 30°C.")
 
         self.set_nombre(nombre.strip())
         self.set_marca(marca.strip())

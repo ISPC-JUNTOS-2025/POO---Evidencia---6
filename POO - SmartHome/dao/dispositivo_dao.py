@@ -41,15 +41,7 @@ class DispositivoDAO(IDispositivoDAO):
                     ))
 
                 elif isinstance(dispositivo, SensorMovimiento):
-                    query_especifica = """
-                        INSERT INTO sensor_movimiento (id_dispositivo, sensibilidad, rango)
-                        VALUES (%s, %s, %s)
-                    """
-                    cursor.execute(query_especifica, (
-                        id_dispositivo,
-                        dispositivo.get_sensibilidad(),
-                        dispositivo.get_rango()
-                    ))
+                    pass
 
                 elif isinstance(dispositivo, Camara):
                     query_especifica = """
@@ -63,15 +55,7 @@ class DispositivoDAO(IDispositivoDAO):
                     ))
 
                 elif isinstance(dispositivo, AireAcondicionado):
-                    query_especifica = """
-                        INSERT INTO aire_acondicionado (id_dispositivo, temperatura_actual, modo)
-                        VALUES (%s, %s, %s)
-                    """
-                    cursor.execute(query_especifica, (
-                        id_dispositivo,
-                        dispositivo.get_temperatura_actual(),
-                        dispositivo.get_modo()
-                    ))
+                    pass
 
                 conn.commit()
                 return id_dispositivo
@@ -99,7 +83,9 @@ class DispositivoDAO(IDispositivoDAO):
             try:
                 cursor = conn.cursor(dictionary=True)
                 query = """
-                    SELECT * FROM dispositivos
+                    SELECT d.*, CONCAT(u.nombre, ' ', u.apellido) as nombre_usuario
+                    FROM dispositivos d
+                    LEFT JOIN usuarios u ON d.id_usuario = u.id_usuario
                 """
                 cursor.execute(query)
                 return cursor.fetchall()
@@ -140,3 +126,16 @@ class DispositivoDAO(IDispositivoDAO):
                 return cursor.rowcount > 0
             except mysql.connector.Error as error:
                 raise Exception(f"Error al eliminar dispositivo: {error}")
+    
+    def buscar_por_nombre_global(self, nombre: str):
+        with DBConn() as conn:
+            try:
+                cursor = conn.cursor(dictionary=True)
+                query = """
+                    SELECT * FROM dispositivos 
+                    WHERE nombre = %s
+                """
+                cursor.execute(query, (nombre,))
+                return cursor.fetchone()
+            except mysql.connector.Error as error:
+                raise Exception(f"Error al buscar dispositivo por nombre: {error}")
