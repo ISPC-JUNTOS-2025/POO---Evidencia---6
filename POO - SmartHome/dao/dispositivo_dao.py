@@ -14,6 +14,18 @@ class DispositivoDAO(IDispositivoDAO):
         with DBConn() as conn:
             try:
                 cursor = conn.cursor()
+                
+                # Verificar si ya existe un dispositivo con el mismo nombre para el usuario
+                query_verificar = """
+                    SELECT id_dispositivo FROM dispositivos 
+                    WHERE nombre = %s AND id_usuario = %s
+                """
+                cursor.execute(query_verificar, (dispositivo.get_nombre(), dispositivo.get_id_usuario()))
+                existe = cursor.fetchone()
+                
+                if existe:
+                    raise Exception(f"Ya existe un dispositivo con el nombre '{dispositivo.get_nombre()}' para este usuario.")
+                
                 query_general = """
                     INSERT INTO dispositivos (nombre, marca, modelo, consumo_energetico, tipo_dispositivo, id_usuario)
                     VALUES (%s, %s, %s, %s, %s, %s)
@@ -41,21 +53,39 @@ class DispositivoDAO(IDispositivoDAO):
                     ))
 
                 elif isinstance(dispositivo, SensorMovimiento):
-                    pass
-
-                elif isinstance(dispositivo, Camara):
                     query_especifica = """
-                        INSERT INTO camara (id_dispositivo, resolucion, vision_nocturna)
+                        INSERT INTO sensor_movimiento (id_dispositivo, estado_activo, ultima_deteccion)
                         VALUES (%s, %s, %s)
                     """
                     cursor.execute(query_especifica, (
                         id_dispositivo,
+                        dispositivo.get_estado_activo(),
+                        dispositivo.get_ultima_deteccion()
+                    ))
+
+                elif isinstance(dispositivo, Camara):
+                    query_especifica = """
+                        INSERT INTO camara (id_dispositivo, resolucion, vision_nocturna, grabacion, almacenamiento_local)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """
+                    cursor.execute(query_especifica, (
+                        id_dispositivo,
                         dispositivo.get_resolucion(),
-                        dispositivo.get_vision_nocturna()
+                        dispositivo.get_vision_nocturna(),
+                        dispositivo.get_grabacion(),
+                        dispositivo.get_almacenamiento_local()
                     ))
 
                 elif isinstance(dispositivo, AireAcondicionado):
-                    pass
+                    query_especifica = """
+                        INSERT INTO aire_acondicionado (id_dispositivo, temperatura_objetivo, modo_eco)
+                        VALUES (%s, %s, %s)
+                    """
+                    cursor.execute(query_especifica, (
+                        id_dispositivo,
+                        dispositivo.get_temperatura_objetivo(),
+                        dispositivo.get_modo_eco()
+                    ))
 
                 conn.commit()
                 return id_dispositivo
@@ -83,9 +113,10 @@ class DispositivoDAO(IDispositivoDAO):
             try:
                 cursor = conn.cursor(dictionary=True)
                 query = """
-                    SELECT d.*, CONCAT(u.nombre, ' ', u.apellido) as nombre_usuario
+                    SELECT DISTINCT d.*, CONCAT(u.nombre, ' ', u.apellido) as nombre_usuario
                     FROM dispositivos d
                     LEFT JOIN usuarios u ON d.id_usuario = u.id_usuario
+                    ORDER BY d.nombre
                 """
                 cursor.execute(query)
                 return cursor.fetchall()

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dominio.AireAcondicionado import AireAcondicionado
+from dominio.aire_acondicionado import AireAcondicionado
 
 class IAireAcondicionadoDAO(ABC):
 

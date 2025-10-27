@@ -2,7 +2,7 @@ USE smart_home_db;
 
 -- Tabla: usuarios
 INSERT INTO usuarios (nombre, apellido, email, contraseña, rol, calle, numero) VALUES
-('Juan', 'Pérez', 'juanperez@gmail.com', '+-=@$x@bsx¿', 'administrador', 'Av. General paz', 742),
+('Mirtha', 'Legrand', 'mirtha@gmail.com', '+-=¿¡6', 'administrador', 'Av. General paz', 742),
 ('María', 'Gómez', 'mariagomez@gmail.com', 'asjdnsc8', 'usuario', 'San Martín', 120),
 ('Carlos', 'López', 'carloslopez@gmail.com', 'asjsnj8s74fa', 'usuario', 'Belgrano', 100),
 ('Lucía', 'Martínez', 'luciamartinez@gmail.com', 'pass', 'usuario', 'Rivadavia', 345),
@@ -33,27 +33,27 @@ INSERT INTO dispositivos (nombre, marca, modelo, activado, consumo_energetico, t
 ('Aire Garage', 'Samsung', 'WindFree', TRUE, 1500, 'Electrodomestico', 3),
 ('Aire Pasillo', 'LG', 'DualCoolMini', FALSE, 1200, 'Electrodomestico', 4),
 ('Aire Patio', 'Daikin', 'FTXJ', TRUE, 1600, 'Electrodomestico', 2),
-('Luz Habitación 2', 'Philips', 'HueGo', TRUE, 7.0, 'Luz', 3),      
-('Luz Baño', 'Xiaomi', 'MiLightMini', FALSE, 5.5, 'Luz', 4),           
-('Luz Terraza', 'Philips', 'HueOutdoor', TRUE, 9.5, 'Luz', 5),         
-('Luz Cocina 2', 'Xiaomi', 'MiLightPlus', TRUE, 8.0, 'Luz', 6),        
-('Luz Living 2', 'Philips', 'HueWhite', FALSE, 6.5, 'Luz', 7),        
-('Luz Oficina', 'Xiaomi', 'MiLightPro', TRUE, 7.5, 'Luz', 8),         
-('Cámara Cocina', 'Logitech', 'C922', TRUE, 5.0, 'Dispositivo De Grabacion', 2),  
+('Luz Habitación 2', 'Philips', 'HueGo', TRUE, 7.0, 'Luz', 3),      
+('Luz Baño', 'Xiaomi', 'MiLightMini', FALSE, 5.5, 'Luz', 4),           
+('Luz Terraza', 'Philips', 'HueOutdoor', TRUE, 9.5, 'Luz', 5),         
+('Luz Cocina 2', 'Xiaomi', 'MiLightPlus', TRUE, 8.0, 'Luz', 6),        
+('Luz Living 2', 'Philips', 'HueWhite', FALSE, 6.5, 'Luz', 7),        
+('Luz Oficina', 'Xiaomi', 'MiLightPro', TRUE, 7.5, 'Luz', 8),         
+('Cámara Cocina', 'Logitech', 'C922', TRUE, 5.0, 'Dispositivo De Grabacion', 2),  
 ('Cámara Habitación', 'Panacom', 'HK720', TRUE, 4.5, 'Dispositivo De Grabacion', 3), 
-('Cámara Oficina', 'Logitech', 'C930', FALSE, 5.0, 'Dispositivo De Grabacion', 4),   
+('Cámara Oficina', 'Logitech', 'C930', FALSE, 5.0, 'Dispositivo De Grabacion', 4),   
 ('Cámara Patio', 'Panacom', 'HK1080Pro', TRUE, 6.0, 'Dispositivo De Grabacion', 5), 
-('Cámara Garage', 'Logitech', 'C910', TRUE, 5.5, 'Dispositivo De Grabacion', 6),     
+('Cámara Garage', 'Logitech', 'C910', TRUE, 5.5, 'Dispositivo De Grabacion', 6),     
 ('Cámara Living 2', 'Panacom', 'HK1080Plus', FALSE, 5.0, 'Dispositivo De Grabacion', 7), 
-('Cámara Entrada 2', 'Logitech', 'C920Pro', TRUE, 5.0, 'Dispositivo De Grabacion', 8),  
-('Cámara Terraza', 'Panacom', 'HK720Pro', TRUE, 4.5, 'Dispositivo De Grabacion', 9),  
-('Sensor Habitación', 'Xiaomi', 'SMLight2', TRUE, 2.0, 'Sensor', 3),  
-('Sensor Cocina', 'Xiaomi', 'SMLight3', TRUE, 2.0, 'Sensor', 4),      
-('Sensor Living', 'Xiaomi', 'SMLight4', FALSE, 2.0, 'Sensor', 5),      
-('Sensor Oficina', 'Xiaomi', 'SMLight5', TRUE, 2.0, 'Sensor', 6),      
-('Sensor Patio', 'Xiaomi', 'SMLight6', TRUE, 2.0, 'Sensor', 7),       
-('Sensor Garage 2', 'Xiaomi', 'SMLight7', FALSE, 2.0, 'Sensor', 8),    
-('Sensor Pasillo 2', 'Xiaomi', 'SMLight8', TRUE, 2.0, 'Sensor', 9),    
+('Cámara Entrada 2', 'Logitech', 'C920Pro', TRUE, 5.0, 'Dispositivo De Grabacion', 8),  
+('Cámara Terraza', 'Panacom', 'HK720Pro', TRUE, 4.5, 'Dispositivo De Grabacion', 9),  
+('Sensor Habitación', 'Xiaomi', 'SMLight2', TRUE, 2.0, 'Sensor', 3),  
+('Sensor Cocina', 'Xiaomi', 'SMLight3', TRUE, 2.0, 'Sensor', 4),      
+('Sensor Living', 'Xiaomi', 'SMLight4', FALSE, 2.0, 'Sensor', 5),      
+('Sensor Oficina', 'Xiaomi', 'SMLight5', TRUE, 2.0, 'Sensor', 6),      
+('Sensor Patio', 'Xiaomi', 'SMLight6', TRUE, 2.0, 'Sensor', 7),       
+('Sensor Garage 2', 'Xiaomi', 'SMLight7', FALSE, 2.0, 'Sensor', 8),    
+('Sensor Pasillo 2', 'Xiaomi', 'SMLight8', TRUE, 2.0, 'Sensor', 9),    
 ('Sensor Terraza', 'Xiaomi', 'SMLight9', TRUE, 2.0, 'Sensor', 10); 
 
 
@@ -179,10 +179,10 @@ lo que puede servir para ofrecer asistencia o capacitación personalizada.
 */
 
 SELECT 
-  u.nombre AS usuario,
-  u.email,
-  a.nombre AS automatizacion,
-  a.fecha_creacion
+  u.nombre AS usuario,
+  u.email,
+  a.nombre AS automatizacion,
+  a.fecha_creacion
 FROM usuarios u
 JOIN automatizaciones a ON u.id_usuario = a.id_usuario
 ORDER BY u.nombre ASC, a.fecha_creacion DESC;
@@ -226,15 +226,15 @@ a usuarios con mayor cantidad de dispositivos.
 */
 
 SELECT nombre, apellido,
-       (SELECT COUNT(*) 
-        FROM dispositivos d 
-        WHERE d.id_usuario = u.id_usuario) AS cantidad_dispositivos
+       (SELECT COUNT(*) 
+        FROM dispositivos d 
+        WHERE d.id_usuario = u.id_usuario) AS cantidad_dispositivos
 FROM usuarios u
 WHERE id_usuario IN (
-    SELECT id_usuario 
-    FROM dispositivos
-    GROUP BY id_usuario
-    HAVING COUNT(*) > 1
+    SELECT id_usuario 
+    FROM dispositivos
+    GROUP BY id_usuario
+    HAVING COUNT(*) > 1
 );
 
 
@@ -246,15 +246,15 @@ Además, ayuda a garantizar una distribución segura y ordenada de los dispositi
 */
 
 SELECT 
-    nombre AS dispositivo,
-    tipo_dispositivo,
-    (SELECT u.nombre FROM usuarios u WHERE u.id_usuario = d.id_usuario) AS nombre_admin,
-    (SELECT u.rol FROM usuarios u WHERE u.id_usuario = d.id_usuario) AS rol_admin
+    nombre AS dispositivo,
+    tipo_dispositivo,
+    (SELECT u.nombre FROM usuarios u WHERE u.id_usuario = d.id_usuario) AS nombre_admin,
+    (SELECT u.rol FROM usuarios u WHERE u.id_usuario = d.id_usuario) AS rol_admin
 FROM dispositivos d
 WHERE id_usuario IN (
-    SELECT id_usuario 
-    FROM usuarios 
-    WHERE rol = 'administrador'
+    SELECT id_usuario 
+    FROM usuarios 
+    WHERE rol = 'administrador'
 );
 
 

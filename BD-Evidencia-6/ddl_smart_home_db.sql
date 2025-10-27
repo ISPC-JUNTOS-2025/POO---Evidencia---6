@@ -13,6 +13,7 @@ CREATE TABLE usuarios (
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
 CREATE TABLE dispositivos (
     id_dispositivo INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -25,6 +26,7 @@ CREATE TABLE dispositivos (
     id_usuario INT NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
 );
+
 
 CREATE TABLE aire_acondicionado (
     id_dispositivo INT PRIMARY KEY,

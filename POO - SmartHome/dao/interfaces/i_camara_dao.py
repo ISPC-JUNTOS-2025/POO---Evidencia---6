@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dominio.Camara import Camara
+from dominio.camara import Camara
 
 class ICamaraDAO(ABC):
 

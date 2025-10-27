@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dominio.Luz import Luz
+from dominio.luz import Luz
 
 class ILuzDAO(ABC):
 

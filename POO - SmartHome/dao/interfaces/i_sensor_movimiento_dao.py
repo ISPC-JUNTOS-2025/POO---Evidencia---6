@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dominio.SensorMovimiento import SensorMovimiento
+from dominio.sensor_movimiento import SensorMovimiento
 
 class ISensorMovimientoDAO(ABC):
 
